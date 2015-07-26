@@ -30,8 +30,8 @@ whatever:
 ```
 
 ## Marathon artifact/group extension
-first, like the configuration, you are allow to use either json or yaml
-second, you can add profiles that can override the default content of the artifact/group configuration. the extended format is under the format like below
+- first, like the configuration, you are allow to use either json or yaml
+- second, you can add profiles that can override the default content of the artifact/group configuration. The extended format is under the format like below
 
 ``` yaml
 # you regular artifact/group config
@@ -99,13 +99,15 @@ container:
 
 ## Commandline Help
 ``` bash
-phili -p prod apps.yaml
+phili -p prod -t 1.0 app.yaml
 ```
-this will use the profile `prod` with it's url, username, password and overwrite the marathon artifact/group with the corresponding `profiles` section, please see `Marathon artifact/group extension`
+this will deploy app.yaml with docker image tagged as 1.0, use the profile `prod` with it's url, username, password and overwrite the marathon artifact/group with the corresponding `profiles` section, please see `Marathon artifact/group extension`
+
+by default `stage` is being used as your profile, and use the image tag specified in `app.yaml`
 
 Please read detail in `phili -h`: 
 ```
-usage: phili.py [-h] [-p PROFILE] [-c CONFFILE] [-t TAG] [--dry-run] filename
+usage: phili [-h] [-p PROFILE] [-c CONFFILE] [-t TAG] [--dry-run] filename
 
 positional arguments:
   filename              config filename
