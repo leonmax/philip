@@ -4,9 +4,11 @@ import yaml
 import json
 import requests
 import copy
+from os import path
 from collections import namedtuple
 
-DEFAULT_CONFIG_FILE = '~/.config/adcade/deploy.json'
+DEFAULT_CONFIG_JSON = '~/.config/phili/config.json'
+DEFAULT_CONFIG_YAML = '~/.config/phili/config.yml'
 
 Profile = namedtuple('Profile', ['name', 'url', 'username', 'password'])
 
@@ -76,7 +78,13 @@ def load_artifact(profile, filename, tag=None):
 
 def load_profile(profile_name, conffile=None):
     if not conffile:
-        conffile = expanduser(DEFAULT_CONFIG_FILE)
+        if path.exists(path.expanduser(DEFAULT_CONFIG_JSON)):
+            conffile = path.expanduser(DEFAULT_CONFIG_JSON)
+        elif path.exists(path.expanduser(DEFAULT_CONFIG_YAML)):
+            conffile = path.expanduser(DEFAULT_CONFIG_YAML)
+        else:
+            # change exception to a customized one
+            raise Exception('no config file exists under ~/.config/phili')
     with open(conffile, 'r') as fp:
         config = yaml.load(fp.read())[profile_name]
         return Profile(profile_name, config['url'], config['username'], config['password'])
@@ -84,7 +92,6 @@ def load_profile(profile_name, conffile=None):
 
 if __name__ == '__main__':
     import argparse
-    from os.path import expanduser
 
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", type=str, help="config filename")
