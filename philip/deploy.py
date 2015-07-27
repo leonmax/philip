@@ -7,8 +7,8 @@ import copy
 from os import path
 from collections import namedtuple
 
-DEFAULT_CONFIG_JSON = '~/.config/phili/config.json'
-DEFAULT_CONFIG_YAML = '~/.config/phili/config.yml'
+DEFAULT_CONFIG_JSON = '~/.config/philip/config.json'
+DEFAULT_CONFIG_YAML = '~/.config/philip/config.yml'
 
 Profile = namedtuple('Profile', ['name', 'url', 'username', 'password'])
 
@@ -84,7 +84,7 @@ def load_profile(profile_name, conffile=None):
             conffile = path.expanduser(DEFAULT_CONFIG_YAML)
         else:
             # change exception to a customized one
-            raise Exception('no config file exists under ~/.config/phili')
+            raise Exception('no config file exists under ~/.config/philip')
     with open(conffile, 'r') as fp:
         config = yaml.load(fp.read())[profile_name]
         return Profile(profile_name, config['url'], config['username'], config['password'])

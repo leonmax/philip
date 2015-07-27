@@ -1,4 +1,4 @@
-# phili
+# philip
 Philippides is the messager who delivered the news of victory from Marathon to Athens.
 Philip is a small tool for deploying apps to [marathon](https://mesosphere.github.io/marathon/) and, of course, deliver the news of success from Marathon to the user.
 
@@ -6,7 +6,7 @@ currently only supports tags for docker apps, groups with tags are not supported
 
 ## Install
 ``` bash
-pip install philip
+pip install git+https://github.com/greencase/philip.git
 ```
 
 ## Configuration
@@ -74,8 +74,8 @@ profiles:
       docker:
         portMappings:
           -
-            containerPort: 8000
-            servicePort: 10000
+            containerPort: 8001
+            servicePort: 10001
 ```
 
 when specify your profile as stage (`philip -p stage app.yml`), you got a final config like below:
