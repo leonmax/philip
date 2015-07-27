@@ -1,0 +1,13 @@
+{
+    stage: {
+        url: STAGE_SERVER,
+        username: STAGE_USERNAME,
+        password: STAGE_PASSWORD
+    },
+
+    prod: {
+        url: PROD_SERVER,
+        username: PROD_USERNAME,
+        password: PROD_PASSWORD
+    }
+}

@@ -90,7 +90,7 @@ def load_profile(profile_name, conffile=None):
         return Profile(profile_name, config['url'], config['username'], config['password'])
 
 
-if __name__ == '__main__':
+def main():
     import argparse
 
     parser = argparse.ArgumentParser()
@@ -105,4 +105,5 @@ if __name__ == '__main__':
     profile = load_profile(args.profile, args.conffile)
     artifact = load_artifact(profile, args.filename, args.tag)
     deploy(profile, artifact, args.dry_run)
+    return 0
 

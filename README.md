@@ -1,18 +1,18 @@
 # phili
 Philippides is the messager who delivered the news of victory from Marathon to Athens.
-Phili is a small tool for deploying apps to [marathon](https://mesosphere.github.io/marathon/) and, of course, deliver the news of success from Marathon to the user.
+Philip is a small tool for deploying apps to [marathon](https://mesosphere.github.io/marathon/) and, of course, deliver the news of success from Marathon to the user.
 
 currently only supports tags for docker apps, groups with tags are not supported. (if you don't need to update tag then it doesn't matter)
 
 ## Install
 ``` bash
-pip install phili
+pip install philip
 ```
 
 ## Configuration
 By default it reads from:
-`~/.config/phili/config.yml` or `~/.config/phili/config.json`
-but you can specific config file by `phili -c config.json app.json` please reference to commandline help
+`~/.config/philip/config.yml` or `~/.config/philip/config.json`
+but you can specific config file by `philip -c config.json app.json` please reference to commandline help
 
 ``` yaml
 stage:
@@ -78,7 +78,7 @@ profiles:
             servicePort: 10000
 ```
 
-when specify your profile as stage (`phili -p stage app.yml`), you got a final config like below:
+when specify your profile as stage (`philip -p stage app.yml`), you got a final config like below:
 
 ``` yaml
 id: ./python-8001-10001
@@ -99,15 +99,15 @@ container:
 
 ## Commandline Help
 ``` bash
-phili -p prod -t 1.0 app.yaml
+philip -p prod -t 1.0 app.yaml
 ```
 this will deploy app.yaml with docker image tagged as 1.0, use the profile `prod` with it's url, username, password and overwrite the marathon artifact/group with the corresponding `profiles` section, please see `Marathon artifact/group extension`
 
 by default `stage` is being used as your profile, and use the image tag specified in `app.yaml`
 
-Please read detail in `phili -h`: 
+Please read detail in `philip -h`: 
 ```
-usage: phili [-h] [-p PROFILE] [-c CONFFILE] [-t TAG] [--dry-run] filename
+usage: philip [-h] [-p PROFILE] [-c CONFFILE] [-t TAG] [--dry-run] filename
 
 positional arguments:
   filename              config filename
