@@ -7,8 +7,12 @@ import copy
 from os import path
 from collections import namedtuple
 
-DEFAULT_CONFIG_JSON = '~/.config/philip/config.json'
-DEFAULT_CONFIG_YAML = '~/.config/philip/config.yml'
+DEFAULT_CONFIG_FILES = ['/etc/philip/config.json',
+                        '/etc/philip/config.yaml',
+                        '/etc/philip/config.yml',
+                        '~/.config/philip/config.json',
+                        '~/.config/philip/config.yaml',
+                        '~/.config/philip/config.yml']
 
 Profile = namedtuple('Profile', ['name', 'url', 'username', 'password'])
 
@@ -78,10 +82,10 @@ def load_artifact(profile, filename, tag=None):
 
 def load_profile(profile_name, conffile=None):
     if not conffile:
-        if path.exists(path.expanduser(DEFAULT_CONFIG_JSON)):
-            conffile = path.expanduser(DEFAULT_CONFIG_JSON)
-        elif path.exists(path.expanduser(DEFAULT_CONFIG_YAML)):
-            conffile = path.expanduser(DEFAULT_CONFIG_YAML)
+        for default_path in DEFAULT_CONFIG_FILES:
+            if path.exists(path.expanduser(default_path)):
+                conffile = path.expanduser(default_path)
+                break
         else:
             # change exception to a customized one
             raise Exception('no config file exists under ~/.config/philip')
@@ -94,11 +98,12 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=str, help="config filename")
-    parser.add_argument("-p", "--profile", type=str, default="stage", help="profile to run")
-    parser.add_argument("-c", "--conffile", type=str, default=None, help="config file of the deployment script")
-    parser.add_argument("-t", "--tag", type=str, help="docker tag")
+    parser.add_argument("filename", type=str, default="Philipfile", help="config filename")
     parser.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
+    parser.add_argument("-p", "--profile", type=str, default="stage", help="profile to run")
+    parser.add_argument("-t", "--tag", type=str, help="docker tag")
+    parser.add_argument("-c", "--conffile", type=str, default=None,
+            help="config file of the deployment script, by default locates at ~/.config/philip/config.json")
 
     args = parser.parse_args()
 
