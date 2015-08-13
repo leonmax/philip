@@ -98,7 +98,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=str, default="Philipfile", help="config filename")
+    parser.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
     parser.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
     parser.add_argument("-p", "--profile", type=str, default="stage", help="profile to run")
     parser.add_argument("-t", "--tag", type=str, help="docker tag")
