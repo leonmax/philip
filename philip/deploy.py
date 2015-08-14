@@ -16,17 +16,18 @@ DEFAULT_CONFIG_FILES = ['/etc/philip/config.json',
 
 Profile = namedtuple('Profile', ['name', 'url', 'username', 'password'])
 
+
 class Artifact:
     def __init__(self, from_conf):
         self._conf = from_conf
 
     def __setitem__(self, key, value):
         last_dot = key.rfind('.')
-        self.__getitem__(key[:last_dot])[key[last_dot+1:]] = value
+        self.__getitem__(key[:last_dot])[key[last_dot + 1:]] = value
 
     def __getitem__(self, key):
         path = [] if not key else key.split(".")
-        return reduce(lambda d,k: d[k], path, self._conf)
+        return reduce(lambda d, k: d[k], path, self._conf)
 
     @property
     def json(self):
@@ -68,16 +69,20 @@ def merge(d1, d2):
 
 
 def load_artifact(profile, filename, tag=None):
-    with open(filename, 'r') as fp:
-        artifact_conf = yaml.load(fp.read())
+    try:
+        with open(filename, 'r') as fp:
+            artifact_conf = yaml.load(fp.read())
 
-        if 'profiles' in artifact_conf:
-            profiles_conf = artifact_conf['profiles']
-            del artifact_conf['profiles']
-            if profile.name in profiles_conf:
-                artifact_conf = merge(artifact_conf, profiles_conf[profile.name])
+            if 'profiles' in artifact_conf:
+                profiles_conf = artifact_conf['profiles']
+                del artifact_conf['profiles']
+                if profile.name in profiles_conf:
+                    artifact_conf = merge(artifact_conf, profiles_conf[profile.name])
 
-        return Artifact(artifact_conf).set_tag(tag)
+            return Artifact(artifact_conf).set_tag(tag)
+    except IOError as e:
+        print("WARNING: Job file %s not found" % filename)
+        raise e
 
 
 def load_profile(profile_name, conffile=None):
@@ -98,17 +103,23 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
-    parser.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
     parser.add_argument("-p", "--profile", type=str, default="stage", help="profile to run")
-    parser.add_argument("-t", "--tag", type=str, help="docker tag")
     parser.add_argument("-c", "--conffile", type=str, default=None,
-            help="config file of the deployment script, by default locates at ~/.config/philip/config.json")
+                        help="config file of the deployment script, by default locates at ~/.config/philip/config.json")
+
+    subparsers = parser.add_subparsers(help='sub-command help')
+    update_parser = subparsers.add_parser('update', help='update an app')
+    update_parser.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
+    update_parser.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
+    update_parser.add_argument("-t", "--tag", type=str, help="docker tag")
 
     args = parser.parse_args()
 
-    profile = load_profile(args.profile, args.conffile)
-    artifact = load_artifact(profile, args.filename, args.tag)
-    deploy(profile, artifact, args.dry_run)
-    return 0
-
+    # noinspection PyBroadException
+    try:
+        profile = load_profile(args.profile, args.conffile)
+        artifact = load_artifact(profile, args.filename, args.tag)
+        deploy(profile, artifact, args.dry_run)
+        return 0
+    except:
+        return 1

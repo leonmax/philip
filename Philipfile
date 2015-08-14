@@ -1,3 +1,4 @@
+# sample Philipfile
 id: python
 instances: 1
 cpus: 0.1
@@ -6,20 +7,14 @@ args: ["python", "-m", "http.server", "8000"]
 container:
   type: DOCKER
   docker:
-    image: python:3.4.3
     network: BRIDGE
+
 profiles:
   stage:
     container:
       docker:
-        portMappings:
-          -
-            containerPort: 8000
-            servicePort: 10000
+        image: python:3.4.3
   prod:
     container:
       docker:
-        portMappings:
-          -
-            containerPort: 8001
-            servicePort: 10001
+        image: python:2.7.10
