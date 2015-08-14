@@ -99,27 +99,15 @@ def load_profile(profile_name, conffile=None):
         return Profile(profile_name, config['url'], config['username'], config['password'])
 
 
-def main():
-    import argparse
+def run(args):
+    profile = load_profile(args.profile, args.conffile)
+    artifact = load_artifact(profile, args.filename, args.tag)
+    deploy(profile, artifact, args.dry_run)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--profile", type=str, default="stage", help="profile to run")
-    parser.add_argument("-c", "--conffile", type=str, default=None,
-                        help="config file of the deployment script, by default locates at ~/.config/philip/config.json")
 
-    subparsers = parser.add_subparsers(help='sub-command help')
-    update_parser = subparsers.add_parser('update', help='update an app')
-    update_parser.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
-    update_parser.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
-    update_parser.add_argument("-t", "--tag", type=str, help="docker tag")
-
-    args = parser.parse_args()
-
-    # noinspection PyBroadException
-    try:
-        profile = load_profile(args.profile, args.conffile)
-        artifact = load_artifact(profile, args.filename, args.tag)
-        deploy(profile, artifact, args.dry_run)
-        return 0
-    except:
-        return 1
+def register_parser(subparsers):
+    parser_update = subparsers.add_parser('update', help='update an app')
+    parser_update.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
+    parser_update.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
+    parser_update.add_argument("-t", "--tag", type=str, help="docker tag")
+    parser_update.set_defaults(func=run)
