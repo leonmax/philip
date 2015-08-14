@@ -4,17 +4,8 @@ import yaml
 import json
 import requests
 import copy
-from os import path
-from collections import namedtuple
-
-DEFAULT_CONFIG_FILES = ['/etc/philip/config.json',
-                        '/etc/philip/config.yaml',
-                        '/etc/philip/config.yml',
-                        '~/.config/philip/config.json',
-                        '~/.config/philip/config.yaml',
-                        '~/.config/philip/config.yml']
-
-Profile = namedtuple('Profile', ['name', 'url', 'username', 'password'])
+from philip.config import load_profile
+from philip.exceptions import PhilipException
 
 
 class Artifact:
@@ -80,23 +71,8 @@ def load_artifact(profile, filename, tag=None):
                     artifact_conf = merge(artifact_conf, profiles_conf[profile.name])
 
             return Artifact(artifact_conf).set_tag(tag)
-    except IOError as e:
-        print("WARNING: Job file %s not found" % filename)
-        raise e
-
-
-def load_profile(profile_name, conffile=None):
-    if not conffile:
-        for default_path in DEFAULT_CONFIG_FILES:
-            if path.exists(path.expanduser(default_path)):
-                conffile = path.expanduser(default_path)
-                break
-        else:
-            # change exception to a customized one
-            raise Exception('no config file exists under ~/.config/philip')
-    with open(conffile, 'r') as fp:
-        config = yaml.load(fp.read())[profile_name]
-        return Profile(profile_name, config['url'], config['username'], config['password'])
+    except IOError:
+        raise PhilipException("{} WARNING: Job file %s not found" % filename)
 
 
 def run(args):
@@ -105,9 +81,9 @@ def run(args):
     deploy(profile, artifact, args.dry_run)
 
 
-def register_parser(subparsers):
-    parser_update = subparsers.add_parser('update', help='update an app')
+def register_parser(subparsers, parent_parsers):
+    parser_update = subparsers.add_parser('update', parents=parent_parsers, help='update an app')
+
     parser_update.add_argument("filename", nargs='?', default="Philipfile", help="config filename")
-    parser_update.add_argument("--dry-run", action='store_true', help="dry run this deploy without really execute")
     parser_update.add_argument("-t", "--tag", type=str, help="docker tag")
     parser_update.set_defaults(func=run)
