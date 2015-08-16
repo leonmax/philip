@@ -24,7 +24,7 @@ setup_options = dict(
     long_description=open('README.md').read(),
     author='leonmax',
     url='https://github.com/greencase/philip',
-    scripts=['bin/philip'],
+    scripts=['bin/phi'],
     packages=find_packages(exclude=['tests*']),
     package_data={'philip': ['example/*.json', 'examples/*/*.rst',
                              'config/*.yml', 'config/*.yaml', 'config/*.json']},
@@ -48,6 +48,6 @@ setup_options = dict(
     ),
 )
 
-setup_options['console'] = ['bin/philip']
+setup_options['console'] = ['bin/phi']
 
 setup(**setup_options)
