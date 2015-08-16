@@ -2,8 +2,8 @@ import json
 
 import requests
 
+from philip.constants import default_headers
 from philip.outputter import print_json
-
 from philip.config import load_server
 
 
@@ -12,18 +12,14 @@ def list_tasks(server, status=None):
     if status:
         url += "?status=%s" % status
 
-    r = requests.get(url, auth=(server.username, server.password), headers={
-        "Accept": "application/json",
-        "Content-Type": "application/json; charset=utf-8"})
+    r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 
 def list_app_tasks(server, app_id):
     url = "%s/v2/apps/%s/tasks" % (server.url, app_id)
 
-    r = requests.get(url, auth=(server.username, server.password), headers={
-        "Accept": "application/json",
-        "Content-Type": "application/json; charset=utf-8"})
+    r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 

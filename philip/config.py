@@ -1,4 +1,3 @@
-import argparse
 from collections import namedtuple
 from os import path
 
@@ -16,6 +15,7 @@ DEFAULT_CONFIG_FILES = ['/etc/philip/config.json',
                         '~/.config/philip/config.yml']
 
 Server = namedtuple('Server', ['name', 'url', 'username', 'password'])
+
 
 def load_server(profile_names, conffile=None):
     if not conffile:

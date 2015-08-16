@@ -2,16 +2,17 @@ import json
 
 import requests
 
+from philip.constants import default_headers
 from philip.config import load_server
 from philip.outputter import print_json
 
 
 def restart_app(server, app_id, force=False):
-    url = "%s/v2/apps/%s/restaurant" % (server.url, app_id)
+    url = "%s/v2/apps/%s/restart" % (server.url, app_id)
     if force:
         url += "?force=true"
 
-    r = requests.get(url, auth=(server.username, server.password))
+    r = requests.post(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 

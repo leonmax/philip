@@ -1,5 +1,5 @@
 from philip.tasks import list
-from philip.parent import parent_parser
+from philip.constants import parent_parser
 
 __author__ = 'leonmax'
 

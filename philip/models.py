@@ -3,10 +3,8 @@ import json
 import yaml
 from philip.exceptions import PhilipException
 
-__author__ = 'leonmax'
 
-
-class Artifact():
+class Artifact:
     def __init__(self, from_conf):
         self._conf = from_conf
 

@@ -2,6 +2,7 @@ import json
 
 import requests
 
+from philip.constants import default_headers
 from philip.config import load_server
 from philip.outputter import print_json
 
@@ -9,14 +10,14 @@ from philip.outputter import print_json
 def list_app_versions(server, app_id):
     url = "%s/v2/apps/%s/versions" % (server.url, app_id)
 
-    r = requests.get(url, auth=(server.username, server.password))
+    r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text)
 
 
 def get_app_version(server, app_id, version):
     url = "%s/v2/apps/%s/versions/%s" % (server.url, app_id, version)
 
-    r = requests.get(url, auth=(server.username, server.password))
+    r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 

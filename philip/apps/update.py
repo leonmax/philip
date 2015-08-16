@@ -2,6 +2,7 @@ import json
 
 import requests
 
+from philip.constants import default_headers
 from philip.config import load_server
 from philip.models import load_artifact
 from philip.outputter import print_json
@@ -16,7 +17,7 @@ def update_app(server, artifact, dry_run=False):
             'server': server.__dict__
         }
     else:
-        r = requests.put(url, artifact.json, auth=(server.username, server.password))
+        r = requests.put(url, artifact.json, auth=(server.username, server.password), headers=default_headers)
         return json.loads(r.text) if r.text else {}
 
 

@@ -1,11 +1,12 @@
 __author__ = 'leonmax'
 
+import argparse
+
 import apps
 import tasks
 
 
 def main():
-    import argparse
 
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help='sub-command help')
