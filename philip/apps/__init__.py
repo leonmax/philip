@@ -1,8 +1,6 @@
 from philip.apps import update, get, restart, delete, list, version
 from philip.constants import parent_parser
 
-__author__ = 'leonmax'
-
 
 def register_command(parser):
     subparsers = parser.add_subparsers()
