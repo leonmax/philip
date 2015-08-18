@@ -8,7 +8,7 @@ from philip.outputter import print_json
 
 
 def delete_group(server, app_id):
-    url = "%s/v2/apps/%s" % (server.url, app_id)
+    url = "%s/v2/groups/%s" % (server.url, app_id)
 
     r = requests.delete(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}

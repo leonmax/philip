@@ -8,8 +8,8 @@ from philip.models import load_artifact
 from philip.outputter import print_json
 
 
-def update_group(server, artifact, dry_run=False):
-    url = "%s/v2/groups/%s" % (server.url, artifact['id'])
+def create_group(server, artifact, dry_run=False):
+    url = "%s/v2/groups" % server.url
 
     if dry_run:
         return {
@@ -17,14 +17,14 @@ def update_group(server, artifact, dry_run=False):
             'server': server.__dict__
         }
     else:
-        r = requests.put(url, artifact.json, auth=(server.username, server.password), headers=default_headers)
+        r = requests.post(url, artifact.json, auth=(server.username, server.password), headers=default_headers)
         return json.loads(r.text) if r.text else {}
 
 
 def run(args):
     server = load_server(args.profiles, args.conffile)
-    artifact = load_artifact(args.profiles, args.message, args.tag)
-    result = update_group(server, artifact, args.dry_run)
+    artifact = load_artifact(args.profiles, args.message)
+    result = create_group(server, artifact, args.dry_run)
     print_json(result)
 
 
