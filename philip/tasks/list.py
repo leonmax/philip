@@ -9,10 +9,11 @@ from philip.config import load_server
 
 def list_tasks(server, status=None):
     url = "%s/v2/tasks" % server.url
+    params = {}
     if status:
-        url += "?status=%s" % status
+        params['status'] = status
 
-    r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
+    r = requests.get(url, params=params, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 

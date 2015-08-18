@@ -3,12 +3,12 @@ import json
 import requests
 
 from philip.constants import default_headers
-from philip.config import load_server
 from philip.outputter import print_json
+from philip.config import load_server
 
 
-def delete_group(server, app_id):
-    url = "%s/v2/groups/%s" % (server.url, app_id)
+def delete_deployment(server, deployment_id):
+    url = "%s/v2/deployments/%s" % (server.url, deployment_id)
 
     r = requests.delete(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
@@ -16,10 +16,10 @@ def delete_group(server, app_id):
 
 def run(args):
     server = load_server(args.profiles, args.conffile)
-    result = delete_group(server, args.app)
+    result = delete_deployment(server, args.deployment)
     print_json(result)
 
 
 def register_command(parser):
-    parser.add_argument("group", type=str, help="name of the group")
+    parser.add_argument("deployment", type=str, help="id of the deployment")
     parser.set_defaults(func=run)

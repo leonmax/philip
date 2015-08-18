@@ -9,10 +9,11 @@ from philip.outputter import print_json
 
 def restart_app(server, app_id, force=False):
     url = "%s/v2/apps/%s/restart" % (server.url, app_id)
+    params = {}
     if force:
-        url += "?force=true"
+        params['force'] = True
 
-    r = requests.post(url, auth=(server.username, server.password), headers=default_headers)
+    r = requests.post(url, params=params, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
 
 
