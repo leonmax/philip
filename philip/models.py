@@ -36,11 +36,9 @@ def merge(d1, d2):
     if d2 is None:
         return copy.deepcopy(d1)
     if not isinstance(d1, dict) or not isinstance(d2, dict):
-        # if both are list, multiple the result
-        if isinstance(d1, list):
-            return [merge(v1, v2)
-                    for v1 in d1
-                    for v2 in (d1 if isinstance(d2, list) else [d2])]
+        # if d1 is a list and d2 is not, merge d2 to every element in d1
+        if isinstance(d1, list) and not isinstance(d2, list):
+            return [merge(v1, d2) for v1 in d1]
         else:
             return copy.deepcopy(d2)
     result = copy.deepcopy(d1)

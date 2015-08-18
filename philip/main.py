@@ -4,6 +4,7 @@ import apps
 import tasks
 import groups
 import deployments
+import servers
 
 
 def main():
@@ -15,6 +16,7 @@ def main():
     tasks.register_command(subparsers.add_parser('task', help='api for tasks'))
     groups.register_command(subparsers.add_parser('group', help='api for groups'))
     deployments.register_command(subparsers.add_parser('deployment', help='api for deployments'))
+    servers.register_command(subparsers.add_parser('server', help='api for server info'))
 
     args = parser.parse_args()
     args.func(args)
