@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.outputter import print_json
 from philip.config import load_server
 
@@ -38,11 +38,13 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
+def register_command(subparsers):
+    parser = subparsers.add_parser('kill', parents=[parent_parser], help='kill tasks')
+    parser.set_defaults(func=run)
+
     parser.add_argument("app", type=str, help="name of the app")
     parser.add_argument("task", nargs="?", help="name of the app")
     parser.add_argument("-H", "--host", type=str, help="Kill only those tasks running on host host. Default: None.")
     parser.add_argument("-s", "--scale", action="store_true", help="Scale the app down (i.e. decrement its instances "
                                                                    "setting by the number of tasks killed) after "
                                                                    "killing the specified tasks. Default: False.")
-    parser.set_defaults(func=run)

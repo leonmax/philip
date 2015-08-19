@@ -2,13 +2,13 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.outputter import print_json
 from philip.config import load_server
 
 
-def leader(server):
-    url = "%s/v2/leader" % server.url
+def list_deployments(server):
+    url = "%s/v2/deployments" % server.url
 
     r = requests.get(url, auth=(server.username, server.password), headers=default_headers)
     return json.loads(r.text) if r.text else {}
@@ -16,11 +16,10 @@ def leader(server):
 
 def run(args):
     server = load_server(args.profiles, args.conffile)
-    result = leader(server)
-
+    result = list_deployments(server)
     print_json(result)
 
 
-def register_command(parser):
+def register_command(subparsers):
+    parser = subparsers.add_parser('list', parents=[parent_parser], help='list deployments')
     parser.set_defaults(func=run)
-

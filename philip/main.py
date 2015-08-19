@@ -1,24 +1,21 @@
-import argparse
+import argcomplete
 
-import apps
-import tasks
-import groups
-import deployments
-import servers
-import events
+from constants import HelpOnErrorArgumentParser
+import app
+import task
+import group
+import deployment
+import server
+import event
 
 
 def main():
+    parser = HelpOnErrorArgumentParser()
+    subparsers = parser.add_subparsers(parser_class=HelpOnErrorArgumentParser, help='sub-command help')
 
-    parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(help='sub-command help')
+    for sub_command in [app, task, group, deployment, server, event]:
+        sub_command.register_command(subparsers)
 
-    apps.register_command(subparsers.add_parser('app', help='api for apps'))
-    tasks.register_command(subparsers.add_parser('task', help='api for tasks'))
-    groups.register_command(subparsers.add_parser('group', help='api for groups'))
-    deployments.register_command(subparsers.add_parser('deployment', help='api for deployments'))
-    servers.register_command(subparsers.add_parser('server', help='api for server info'))
-    events.register_command(subparsers.add_parser('event', help='api for server info'))
-
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
     args.func(args)

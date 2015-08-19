@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.config import load_server
 from philip.models import load_artifact
 from philip.outputter import print_json
@@ -20,7 +20,8 @@ def update_app(server, artifact, dry_run=False, force=False):
             'server': server.__dict__
         }
     else:
-        r = requests.put(url, artifact.json, params=params, auth=(server.username, server.password), headers=default_headers)
+        r = requests.put(url, artifact.json, params=params,
+                         auth=(server.username, server.password), headers=default_headers)
         return json.loads(r.text) if r.text else {}
 
 
@@ -31,8 +32,10 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
+def register_command(subparsers):
+    parser = subparsers.add_parser('update', parents=[parent_parser], help='update an app')
+    parser.set_defaults(func=run)
+
     parser.add_argument("-t", "--tag", type=str, help="docker tag")
     parser.add_argument("--dry-run", action='store_true', help="dry run this command without really execute")
     parser.add_argument("-f", "--force", action='store_true', help="name of the app")
-    parser.set_defaults(func=run)

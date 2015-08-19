@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.config import load_server
 from philip.outputter import print_json
 
@@ -30,7 +30,9 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
+def register_command(subparsers):
+    parser = subparsers.add_parser('version', parents=[parent_parser], help='app versions')
+    parser.set_defaults(func=run)
+
     parser.add_argument("app", type=str, help="app name")
     parser.add_argument("version", nargs="?", help="optional version")
-    parser.set_defaults(func=run)

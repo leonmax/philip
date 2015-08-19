@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.config import load_server
 from philip.models import load_artifact
 from philip.outputter import print_json
@@ -28,6 +28,8 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
-    parser.add_argument("--dry-run", action='store_true', help="dry run this command without really execute")
+def register_command(subparsers):
+    parser = subparsers.add_parser('create', parents=[parent_parser], help='create group')
     parser.set_defaults(func=run)
+
+    parser.add_argument("--dry-run", action='store_true', help="dry run this command without really execute")

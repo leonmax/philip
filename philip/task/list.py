@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.outputter import print_json
 from philip.config import load_server
 
@@ -33,7 +33,9 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
+def register_command(subparsers):
+    parser = subparsers.add_parser('list', parents=[parent_parser], help='list tasks')
+    parser.set_defaults(func=run)
+
     parser.add_argument("app", nargs="?", help="name of the app")
     parser.add_argument("-s", "--status", choices=["running", "staging"], help="name of the app")
-    parser.set_defaults(func=run)

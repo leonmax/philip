@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from philip.constants import default_headers
+from philip.constants import default_headers, parent_parser
 from philip.config import load_server
 from philip.outputter import print_json
 
@@ -20,6 +20,8 @@ def run(args):
     print_json(result)
 
 
-def register_command(parser):
-    parser.add_argument("group", type=str, help="name of the group")
+def register_command(subparsers):
+    parser = subparsers.add_parser('get', parents=[parent_parser], help='get group')
     parser.set_defaults(func=run)
+
+    parser.add_argument("group", type=str, help="name of the group")
