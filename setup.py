@@ -8,7 +8,8 @@ import philip
 
 requires = ['requests==2.7.0',
             'PyYAML==3.11',
-            'docutils>=0.10']
+            'docutils>=0.10',
+            'argcomplete']
 
 
 if sys.version_info[:2] == (2, 6):
