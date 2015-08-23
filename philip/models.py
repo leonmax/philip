@@ -1,6 +1,7 @@
 import copy
 import json
 import yaml
+from merger import merge
 from philip.exceptions import PhilipException
 
 
@@ -29,25 +30,6 @@ class Artifact:
             image = self["container.docker.image"]
             self["container.docker.image"] = "%s:%s" % (image.split(":")[0], tag)
         return self
-
-
-def merge(d1, d2):
-    # completely replace d1 with d2
-    if d2 is None:
-        return copy.deepcopy(d1)
-    if not isinstance(d1, dict) or not isinstance(d2, dict):
-        # if d1 is a list and d2 is not, merge d2 to every element in d1
-        if isinstance(d1, list) and not isinstance(d2, list):
-            return [merge(v1, d2) for v1 in d1]
-        else:
-            return copy.deepcopy(d2)
-    result = copy.deepcopy(d1)
-    for key in d2:
-        if key in result:
-            result[key] = merge(result[key], d2[key])
-        elif d2[key] is not None:
-            result[key] = d2[key]
-    return result
 
 
 def load_artifact(profile_names, filename, tag=None):

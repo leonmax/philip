@@ -36,6 +36,8 @@ def register_command(subparsers):
     parser = subparsers.add_parser('update', parents=[parent_parser], help='update an app')
     parser.set_defaults(func=run)
 
+    parser.add_argument("-f", "--force", action='store_true', help="name of the app")
     parser.add_argument("-t", "--tag", type=str, help="docker tag")
     parser.add_argument("--dry-run", action='store_true', help="dry run this command without really execute")
-    parser.add_argument("-f", "--force", action='store_true', help="name of the app")
+    parser.add_argument("-m", "--message", type=str, default="Philipfile",
+                        help="the message file Philip delivery to marathon")
