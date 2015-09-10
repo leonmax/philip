@@ -52,3 +52,4 @@ setup_options = dict(
 setup_options['console'] = ['bin/phi']
 
 setup(**setup_options)
+hi
