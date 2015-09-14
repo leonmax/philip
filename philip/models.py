@@ -1,7 +1,8 @@
 import copy
 import json
 import yaml
-from merger import merge
+
+from philip.merger import merge
 from philip.exceptions import PhilipException
 
 

@@ -1,12 +1,7 @@
 import argcomplete
 
-from constants import HelpOnErrorArgumentParser
-import app
-import task
-import group
-import deployment
-import server
-import event
+from philip.constants import HelpOnErrorArgumentParser
+from philip import app, deployment, event, group, server, task
 
 
 def main():
