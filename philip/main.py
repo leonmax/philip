@@ -6,7 +6,8 @@ from philip import app, deployment, event, group, server, task
 
 def main():
     parser = HelpOnErrorArgumentParser()
-    subparsers = parser.add_subparsers(parser_class=HelpOnErrorArgumentParser, help='sub-command help')
+    subparsers = parser.add_subparsers(parser_class=HelpOnErrorArgumentParser, help='sub-command help', dest='parser')
+    subparsers.required = True  # Partial fix for Python 3 bug: http://bugs.python.org/issue16308
 
     for sub_command in [app, task, group, deployment, server, event]:
         sub_command.register_command(subparsers)
@@ -14,3 +15,6 @@ def main():
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
     args.func(args)
+
+if __name__ == '__main__':
+    main()
