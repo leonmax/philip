@@ -1,8 +1,9 @@
 # philip
 Philippides is the messager who delivered the news of victory from Marathon to Athens.
-Philip is a small tool for deploying apps to [marathon](https://mesosphere.github.io/marathon/) and, of course, deliver the news of success from Marathon to the user.
 
-currently only supports tags for docker apps, groups with tags are not supported. (if you don't need to update tag then it doesn't matter)
+Philip is a service agnostic command line tool for deploying Docker containers to different platforms such as [marathon](https://mesosphere.github.com/marathon/) and [Amazon ECS](https://aws.amazon.com/ecs/).
+
+Philip currently only supports tags for docker apps, groups with tags are not supported. (if you don't need to update tag then it doesn't matter)
 
 ## Install
 ``` bash
