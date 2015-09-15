@@ -2,6 +2,8 @@ import copy
 import json
 import yaml
 
+from functools import reduce
+
 from philip.merger import merge
 from philip.exceptions import PhilipException
 
