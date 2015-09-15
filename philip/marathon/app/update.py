@@ -28,7 +28,7 @@ def update_app(server, artifact, dry_run=False, force=False):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     artifact = load_artifact(args.profiles, args.message, args.tag)
     result = update_app(server, artifact, args.dry_run, args.force)
     print_json(result)

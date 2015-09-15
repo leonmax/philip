@@ -17,7 +17,7 @@ def delete_group(server, app_id):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = delete_group(server, args.app)
     print_json(result)
 

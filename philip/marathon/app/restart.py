@@ -20,7 +20,7 @@ def restart_app(server, app_id, force=False):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = restart_app(server, args.app, args.force)
     print_json(result)
 

@@ -28,7 +28,7 @@ def list_app_tasks(server, app_id):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     if args.app:
         result = list_app_tasks(server, args.app)
     else:

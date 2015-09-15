@@ -17,7 +17,7 @@ def list_deployments(server):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = list_deployments(server)
     print_json(result)
 

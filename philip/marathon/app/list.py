@@ -22,7 +22,7 @@ def list_apps(server, cmd="", embed=None):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = list_apps(server)
     print_json(result)
 

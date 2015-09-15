@@ -17,7 +17,7 @@ def get_app(server, app_id):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = get_app(server, args.app)
     print_json(result)
 

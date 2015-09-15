@@ -32,7 +32,7 @@ def kill_app_all_tasks(server, app_id, host=None, scale=False):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     if args.task:
         result = kill_app_task(server, args.app, args.task, args.scale)
     else:

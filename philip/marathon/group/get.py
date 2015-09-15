@@ -17,7 +17,7 @@ def get_group(server, group_id):
 
 
 def run(args):
-    server = config.get(args.profiles, args.conffile)
+    server = config.get(args)
     result = get_group(server, args.group)
     print_json(result)
 
