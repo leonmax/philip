@@ -17,7 +17,7 @@ class HelpOnErrorArgumentParser(argparse.ArgumentParser):
 
 
 parent_parser = HelpOnErrorArgumentParser(add_help=False)
-parent_parser.add_argument("-p", "--profiles", action='append', default=["stage"], help="profile to run")
+parent_parser.add_argument("-p", "--profiles", action='append', default=["default"], help="profile to run")
 parent_parser.add_argument("-c", "--conffile", type=str, default=None,
                            help="Config for Philip, by default locates at ~/.config/philip/config.json")
 
