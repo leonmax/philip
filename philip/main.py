@@ -1,7 +1,7 @@
 import argcomplete
 
 from philip.constants import HelpOnErrorArgumentParser
-from philip import app, deployment, event, group, server, task
+from philip import marathon
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     subparsers = parser.add_subparsers(parser_class=HelpOnErrorArgumentParser, help='sub-command help', dest='parser')
     subparsers.required = True  # Partial fix for Python 3 bug: http://bugs.python.org/issue16308
 
-    for sub_command in [app, task, group, deployment, server, event]:
+    for sub_command in [marathon]:
         sub_command.register_command(subparsers)
 
     argcomplete.autocomplete(parser)
