@@ -40,3 +40,5 @@ class ListTasks(Command):
                 containers.extend([x for x in task['containers']])
             dict_to_table(containers, keys=container_keys, sort='name')
 
+commands = [ListTasks]
+description = 'Manage Amazon ECS Tasks'
