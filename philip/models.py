@@ -1,11 +1,42 @@
-import copy
 import json
 import yaml
 
 from functools import reduce
 
+from philip.config import Config
 from philip.merger import merge
+from philip.constants import parent_parser
 from philip.exceptions import PhilipException
+
+
+class Command:
+
+    name = None
+    help = 'No help is provided'
+    description = 'No description provided'
+    parents = [parent_parser]
+    arguments = []
+    calls = 0
+
+    @staticmethod
+    def config(arguments):
+        return Config(arguments)
+
+    @classmethod
+    def add_argument(cls, *args, **kwargs):
+        cls.arguments.append({'args': args, 'kwargs': kwargs})
+
+    @classmethod
+    def register(cls, subparsers):
+        cmd = cls()
+        parser = subparsers.add_parser(cls.name, description=cls.description, help=cls.help, parents=cls.parents)
+        parser.set_defaults(func=cmd.execute)
+        for arg in cls.arguments:
+            parser.add_argument(*arg['args'], **arg['kwargs'])
+        return cmd
+
+    def execute(self, args):
+        raise NotImplemented
 
 
 class Artifact:

@@ -5,6 +5,9 @@ import yaml
 
 from philip.exceptions import PhilipException
 
+MarathonServer = namedtuple('MarathonServer', ['name', 'url', 'username', 'password'])
+ECSConfig = namedtuple('ECSConfig', ['cluster', 'aws_options'])
+
 
 class Config:
 
@@ -17,11 +20,10 @@ class Config:
 
     PROVIDERS = ['marathon', 'ecs']
 
-    _marathon_config = namedtuple('Server', ['name', 'url', 'username', 'password'])
-    _ecs_config = namedtuple('ECS_Config', ['cluster', 'aws_options'])
-
-    def __init__(self):
-        self.config = {}
+    def __init__(self, arguments):
+        self.arguments = arguments
+        self.profile_names = arguments.profiles
+        self.config = self._load_config(arguments.conffile)
 
     def _load_config(self, config_path=None):
         if not config_path:
@@ -29,47 +31,37 @@ class Config:
                 if path.exists(path.expanduser(default_path)):
                     config_path = path.expanduser(default_path)
                     break
-        if not config_path:
-            raise PhilipException('No configuration file present')
-        with open(config_path, 'r') as fp:
-            self.config = yaml.load(fp.read())
+        if config_path:
+            with open(config_path, 'r') as fp:
+                config = yaml.load(fp.read())
+                self._validate_config(config)
+                return config
+        raise PhilipException('No configuration file present')
 
-    def _get_profile(self, profile_name):
-        if profile_name in self.config['profiles']:
-            return self.config['profiles'][profile_name]
-
-    def _get_provider(self, profile):
-        if 'provider' not in profile:
-            raise PhilipException('Profiles must specify a provider')
-        if 'provider_type' not in profile['provider']:
-            raise PhilipException('You must specify a provider_type')
-        if profile['provider']['provider_type'] not in self.PROVIDERS:
-            raise PhilipException('Unknown provider {}'.format(profile['provider']))
-        return profile['provider']
-
-    def _get_marathon_server(self, provider):
-        return self._marathon_config(provider, provider['url'], provider['username'], provider['password'])
-
-    def _get_ecs_config(self, provider):
-        return self._ecs_config(provider['cluster'], provider['aws_config'])
-
-    def _get_config(self, profile, provider_name=None):
-        provider = self._get_provider(profile)
-        if provider_name:
-            if provider_name != provider['provider_type']:  # TODO
-                raise PhilipException('This profile does not support provider {}'.format(provider_name))
-        if provider_name == 'marathon':
-            return self._get_marathon_server(provider)
-        if provider_name == 'ecs':
-            return self._get_ecs_config(provider)
-
-    def get(self, profile_names, config_path=None, provider_name=None):
-        if not self.config or config_path:
-            self._load_config(config_path)
-        if 'profiles' not in self.config:
+    def _validate_config(self, config):
+        if 'profiles' not in config:
             raise PhilipException('You must specify at least one "profile" in your configuration')
-        for profile in reversed(profile_names):
-            profile = self._get_profile(profile)
-            if profile:
-                return self._get_config(profile, provider_name)
-        raise PhilipException('Unable to load configuration')
+        for profile in config['profiles']:
+            _profile = config['profiles'][profile]
+            if 'provider' not in _profile:
+                raise PhilipException('{} must specify a provider'.format(profile))
+            if _profile['provider']['provider_type'] not in self.PROVIDERS:
+                raise PhilipException('Unknown provider {}'.format(_profile['provider']['provider_type']))
+
+    def get(self):
+        for profile in reversed(self.profile_names):
+            if profile in self.config['profiles']:
+                profile = self.config['profiles'][profile]
+                provider_type = profile['provider']['provider_type']
+                if provider_type == 'marathon':
+                    return MarathonServer(
+                        profile,
+                        profile['provider']['url'],
+                        profile['provider']['username'],
+                        profile['provider']['password']
+                    )
+                if provider_type == 'ecs':
+                    return ECSConfig(
+                        profile['provider']['cluster'],
+                        profile['provider']['aws_config']
+                    )
