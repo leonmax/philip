@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from philip.models import Command
-from philip.ecs.util import get_ecs, search_response, print_aws_response
+from philip.util import dict_to_table
+from philip.ecs.util import get_ecs, search_response
 
 
 class ListClusters(Command):
@@ -24,7 +25,9 @@ class ListClusters(Command):
                 'clusters', conn.describe_clusters(cluster_ids)
             )][0]
 
-        print_aws_response('ECS_Cluster', clusters_raw)
+        keys = ['clusterName', 'status', 'registeredContainerInstancesCount', 'pendingTasksCount', 'runningTasksCount']
+
+        dict_to_table(clusters_raw, keys=keys, sort='clusterName')
 
 
 commands = [ListClusters]
