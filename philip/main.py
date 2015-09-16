@@ -21,7 +21,6 @@ def main():
         prog='Philip',
         description='Philip is a service agnostic command line tool for deploying Docker containers.'
     )
-    parser.add_argument('-m', '--message')
 
     subparsers = parser.add_subparsers(parser_class=HelpOnErrorArgumentParser, help='sub-command help', dest='parser')
     subparsers.required = True  # Partial fix for Python 3 bug: http://bugs.python.org/issue16308
